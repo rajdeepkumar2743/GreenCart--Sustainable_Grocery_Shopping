@@ -9,20 +9,29 @@ const SellerLogin = () => {
   const [password, setPassword] = useState("");
 
   const onSubmitHandler = async (event) => {
+    event.preventDefault();
     try {
-      event.preventDefault();
       const { data } = await axios.post('/api/seller/login', { email, password });
+
       if (data.success) {
-        setIsSeller(true);
-        navigate('/seller');
+        // ✅ Login successful, now recheck session status
+        const authRes = await axios.get("/api/seller/is-auth");
+        if (authRes.data.success) {
+          setIsSeller(true);
+          toast.success("Login Successful");
+          navigate('/seller');
+        } else {
+          toast.error("Auth failed after login.");
+        }
       } else {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response?.data?.message || error.message);
     }
   };
 
+  // ✅ Redirect if already logged in
   useEffect(() => {
     if (isSeller) {
       navigate("/seller");
@@ -31,7 +40,6 @@ const SellerLogin = () => {
 
   return !isSeller && (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#f0f9ff] via-white to-[#e8f3ff] text-sm text-gray-600 transition-all duration-300 font-[Outfit]">
-
       <motion.form
         onSubmit={onSubmitHandler}
         initial={{ opacity: 0, y: 30 }}

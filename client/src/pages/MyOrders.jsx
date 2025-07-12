@@ -23,6 +23,16 @@ const MyOrders = () => {
     }
   }, [user]);
 
+  // Status color helper
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'Order Preparing': return 'bg-yellow-100 text-yellow-700';
+      case 'Out for delivery': return 'bg-orange-100 text-orange-700';
+      case 'Delivered': return 'bg-green-100 text-green-700';
+      default: return 'bg-gray-100 text-gray-700';
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -73,7 +83,7 @@ const MyOrders = () => {
                   <div className='bg-indigo-50 p-3 rounded-lg'>
                     <img
                       src={item?.product?.image?.[0]}
-                      alt=""
+                      alt="product"
                       className='w-16 h-16 object-cover rounded-md shadow-sm'
                     />
                   </div>
@@ -88,7 +98,12 @@ const MyOrders = () => {
                 {/* Order Details */}
                 <div className='flex flex-col gap-1 text-sm text-gray-600 md:text-right'>
                   <p><span className="font-medium">Quantity:</span> {item?.quantity || "1"}</p>
-                  <p><span className="font-medium">Status:</span> <span className='text-green-600'>{order.status}</span></p>
+                  <p>
+                    <span className="font-medium">Status:</span>{' '}
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${getStatusColor(order.orderStatus)}`}>
+                      {order.orderStatus}
+                    </span>
+                  </p>
                   <p><span className="font-medium">Date:</span> {new Date(order.createdAt).toLocaleDateString()}</p>
                 </div>
 

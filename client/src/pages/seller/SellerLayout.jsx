@@ -1,11 +1,14 @@
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { assets } from "../../assets/assets";
 import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
-import { motion } from "framer-motion"; // ✅ added animation
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 const SellerLayout = () => {
-  const { axios, navigate } = useAppContext();
+  const { axios } = useAppContext();
+  const navigate = useNavigate();
+  const [authChecked, setAuthChecked] = useState(false);
 
   const sidebarLinks = [
     { name: "Add Product", path: "/seller", icon: assets.add_icon },
@@ -19,6 +22,7 @@ const SellerLayout = () => {
       if (data.success) {
         toast.success(data.message);
         navigate("/");
+        window.location.reload(); // clear state
       } else {
         toast.error(data.message);
       }
@@ -26,6 +30,27 @@ const SellerLayout = () => {
       toast.error(error.message);
     }
   };
+
+  // ✅ Check seller authentication on mount
+  const checkAuth = async () => {
+    try {
+      const { data } = await axios.get("/api/seller/is-auth");
+      if (!data.success) {
+        toast.error("Not Authorized");
+        navigate("/seller-login");
+      } else {
+        setAuthChecked(true); // ✅ Only show layout after auth check
+      }
+    } catch (error) {
+      navigate("/seller-login");
+    }
+  };
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
+  if (!authChecked) return null; // or show a spinner
 
   return (
     <>
@@ -88,7 +113,7 @@ const SellerLayout = () => {
           ))}
         </motion.div>
 
-        {/* Outlet / Content */}
+        {/* Content */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
