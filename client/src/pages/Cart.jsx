@@ -68,11 +68,12 @@ const Cart = () => {
 
       if (data.success) {
         toast.success(data.message);
-        setCartItems({});
+
         if (paymentOption === "COD") {
+          setCartItems({}); // ✅ Clear cart only if payment is COD
           navigate("/my-orders");
         } else {
-          window.location.replace(data.url);
+          window.location.replace(data.url); // Stripe will clear cart after successful payment
         }
       } else {
         toast.error(data.message);
@@ -93,6 +94,14 @@ const Cart = () => {
       getUserAddress();
     }
   }, [user]);
+
+  const cartTotal = getCartAmount();
+  const shippingFee = cartTotal >= 150 ? 0 : 20;
+  const tax = cartArray.reduce(
+    (acc, item) => acc + item.offerPrice * item.quantity * 0.04,
+    0
+  );
+  const totalAmount = cartTotal + shippingFee + tax;
 
   return products.length > 0 && cartItems ? (
     <motion.div
@@ -124,9 +133,7 @@ const Cart = () => {
             <div className="flex items-center gap-4 md:gap-6">
               <div
                 onClick={() => {
-                  navigate(
-                    `/products/${product.category.toLowerCase()}/${product._id}`
-                  );
+                  navigate(`/products/${product.category.toLowerCase()}/${product._id}`);
                   scrollTo(0, 0);
                 }}
                 className="cursor-pointer w-24 h-24 border rounded-lg overflow-hidden flex items-center justify-center shadow-sm hover:shadow-lg"
@@ -166,7 +173,7 @@ const Cart = () => {
             </div>
             <p className="text-center font-semibold text-gray-800">
               {currency}
-              {product.offerPrice * product.quantity}
+              {(product.offerPrice * product.quantity).toFixed(2)}
             </p>
             <motion.button
               onClick={() => removeFromCart(product._id)}
@@ -233,8 +240,7 @@ const Cart = () => {
                   }}
                   className="px-3 py-2 hover:bg-gray-100 cursor-pointer border-b last:border-none"
                 >
-                  {address.street}, {address.city}, {address.state},{" "}
-                  {address.country}
+                  {address.street}, {address.city}, {address.state}, {address.country}
                 </p>
               ))}
               <p
@@ -257,27 +263,36 @@ const Cart = () => {
         </div>
 
         {/* Price Breakdown */}
-        <div className="text-sm space-y-2 text-gray-700">
-          <p className="flex justify-between">
-            <span>Price</span>
-            <span>{currency}{getCartAmount()}</span>
-          </p>
-          <p className="flex justify-between">
-            <span>Shipping Fee</span>
-            <span className="text-green-600">Free</span>
-          </p>
-          <p className="flex justify-between">
-            <span>Tax (2%)</span>
-            <span>{currency}{(getCartAmount() * 2) / 100}</span>
-          </p>
-          <p className="flex justify-between font-semibold text-lg mt-3">
-            <span>Total</span>
-            <span>
-              {currency}
-              {getCartAmount() + (getCartAmount() * 2) / 100}
-            </span>
-          </p>
-        </div>
+<div className="text-sm space-y-2 text-gray-700">
+  <p className="flex justify-between">
+    <span>Price</span>
+    <span>{currency}{cartTotal.toFixed(2)}</span>
+  </p>
+
+  <p className="flex justify-between">
+    <span>Shipping Fee</span>
+    <span className={shippingFee === 0 && cartArray.length > 0 ? "text-green-600" : ""}>
+      {cartArray.length === 0
+        ? `${currency}0`
+        : shippingFee === 0
+        ? "Free"
+        : `${currency}${shippingFee}`}
+    </span>
+  </p>
+
+  <p className="flex justify-between">
+    <span>Tax (4%)</span>
+    <span>{currency}{tax.toFixed(2)}</span>
+  </p>
+
+  <p className="flex justify-between font-semibold text-lg mt-3">
+    <span>Total</span>
+    <span>
+      {currency}
+      {cartArray.length === 0 ? "0.00" : totalAmount.toFixed(2)}
+    </span>
+  </p>
+</div>
 
         <motion.button
           onClick={placeOrder}

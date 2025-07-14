@@ -10,6 +10,8 @@ const Login = () => {
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [showVerification, setShowVerification] = React.useState(false);
+  const [code, setCode] = React.useState("");
 
   const onSubmitHandler = async (event) => {
     try {
@@ -19,14 +21,37 @@ const Login = () => {
       });
 
       if (data.success) {
-        navigate('/');
-        setUser(data.user);
-        setShowUserLogin(false);
+        if (state === "register") {
+          setShowVerification(true);
+          toast.success("Verification code sent to email");
+        } else {
+          navigate('/');
+          setUser(data.user);
+          setShowUserLogin(false);
+        }
       } else {
         toast.error(data.message);
       }
     } catch (error) {
       toast.error(error.message);
+    }
+  };
+
+  const handleVerifyEmail = async () => {
+    try {
+      const { data } = await axios.post("/api/user/verify-email", {
+        email,
+        code,
+      });
+      if (data.success) {
+        toast.success("Email verified successfully. You can now login.");
+        setShowVerification(false);
+        setState("login");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error("Verification failed");
     }
   };
 
@@ -85,23 +110,53 @@ const Login = () => {
           />
         </div>
 
-        <p className="text-sm text-gray-600">
-          {state === "register" ? "Already have an account?" : "Create an account?"}{" "}
-          <span
-            onClick={() => setState(state === "register" ? "login" : "register")}
-            className="text-primary font-medium cursor-pointer hover:underline"
-          >
-            Click here
-          </span>
-        </p>
+        {showVerification && (
+          <>
+            <div className="w-full">
+              <p className="text-sm font-medium text-gray-600 mb-1">Verification Code</p>
+              <input
+                onChange={(e) => setCode(e.target.value)}
+                value={code}
+                placeholder="Enter 6-digit code"
+                className="border border-gray-300 rounded-md w-full p-2"
+                type="text"
+                required
+              />
+            </div>
 
-        <motion.button
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.97 }}
-          className="bg-primary hover:bg-primary-dull transition-all text-white w-full py-2 rounded-md font-semibold text-sm tracking-wide mt-2 shadow-md"
-        >
-          {state === "register" ? "Create Account" : "Login"}
-        </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              type="button"
+              onClick={handleVerifyEmail}
+              className="bg-green-600 text-white w-full py-2 rounded-md font-semibold mt-2 shadow-md"
+            >
+              Verify Email
+            </motion.button>
+          </>
+        )}
+
+        {!showVerification && (
+          <>
+            <p className="text-sm text-gray-600">
+              {state === "register" ? "Already have an account?" : "Create an account?"}{" "}
+              <span
+                onClick={() => setState(state === "register" ? "login" : "register")}
+                className="text-primary font-medium cursor-pointer hover:underline"
+              >
+                Click here
+              </span>
+            </p>
+
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="bg-primary hover:bg-primary-dull transition-all text-white w-full py-2 rounded-md font-semibold text-sm tracking-wide mt-2 shadow-md"
+            >
+              {state === "register" ? "Create Account" : "Login"}
+            </motion.button>
+          </>
+        )}
       </motion.form>
     </div>
   );

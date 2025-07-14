@@ -55,14 +55,15 @@ const AddProduct = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
-      className="no-scrollbar flex-1 h-[95vh] overflow-y-scroll bg-gradient-to-br from-[#f1fdf7] via-white to-[#eef2f9] px-4 md:px-10 py-10"
+     className="no-scrollbar flex-1 h-[95vh] overflow-y-scroll bg-gradient-to-br from-[#f1fdf7] via-white to-[#eef2f9] px-2 md:px-4 py-6"
+
     >
       <motion.form
         onSubmit={onSubmitHandler}
         initial={{ y: 40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.2 }}
-        className="space-y-6 bg-white/90 backdrop-blur-md shadow-2xl rounded-xl p-6 md:p-10 max-w-2xl mx-auto border border-gray-200"
+        className="space-y-4 bg-white/90 backdrop-blur-md shadow-2xl rounded-xl p-6 md:p-10 max-w-xl mx-auto border border-gray-200"
       >
         <div>
           <p className="text-xl font-semibold text-gray-800 mb-3 tracking-wide">Product Image</p>
@@ -87,7 +88,7 @@ const AddProduct = () => {
                     hidden
                   />
                   <img
-                    className="w-24 h-24 object-cover border border-gray-300 rounded-lg shadow hover:shadow-md transition bg-white"
+                    className="w-16 h-16 object-cover border border-gray-300 rounded-lg shadow hover:shadow-md transition bg-white"
                     src={files[index] ? URL.createObjectURL(files[index]) : assets.upload_area}
                     alt="upload"
                   />

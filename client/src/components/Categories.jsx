@@ -18,7 +18,7 @@ const Categories = () => {
       </motion.p>
 
       <motion.div
-        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 mt-8 gap-6"
+        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-6 mt-8 gap-6"
         initial="hidden"
         whileInView="visible"
         variants={{

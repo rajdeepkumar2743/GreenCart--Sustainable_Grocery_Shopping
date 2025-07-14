@@ -114,17 +114,12 @@ export const categories = [
     bgColor: "#FEE0E0",
   },
   {
-    text: "Cold Drinks",
+    text: "Juices & Drinks",
     path: "Drinks",
     image: bottles_image,
     bgColor: "#F0F5DE",
   },
-  {
-    text: "Instant Food",
-    path: "Instant",
-    image: maggi_image,
-    bgColor: "#E1F5EC",
-  },
+ 
   {
     text: "Dairy Products",
     path: "Dairy",

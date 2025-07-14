@@ -53,15 +53,15 @@ const Contact = () => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-[#f4fcf9] via-white to-[#f0f4ff] py-16 px-4 min-h-screen flex items-center justify-center">
+    <div className="bg-gradient-to-br from-[#f4fcf9] via-white to-[#f0f4ff] py-16 px-4 max-h-screen flex items-center justify-center">
       <motion.div
-        className="max-w-2xl w-full mx-auto"
+        className="max-w-lg w-full mx-auto"
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6 }}
       >
         <motion.h2
-          className="text-4xl font-bold text-center text-primary mb-2 tracking-wide"
+          className="text-4xl font-bold text-center text-primary mb-1 tracking-wide"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
@@ -70,7 +70,7 @@ const Contact = () => {
         </motion.h2>
 
         <motion.p
-          className="text-center text-gray-600 mb-6 text-[15px]"
+          className="text-center text-gray-600 mb-4 text-[14px]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
@@ -80,43 +80,43 @@ const Contact = () => {
 
         <form
           onSubmit={handleSubmit}
-          className="space-y-6 bg-white/90 backdrop-blur-sm p-8 rounded-2xl shadow-2xl border border-gray-200"
+          className="space-y-8 bg-white/90 backdrop-blur-sm p-5 rounded-xl shadow-xl border border-gray-200"
         >
           <div className="relative">
-            <label className="block mb-1 text-gray-700 font-semibold">Name</label>
+            <label className="block mb-1 text-gray-700 font-semibold text-sm">Name</label>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
               placeholder="Enter your name"
-              className="peer w-full border border-gray-300 px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-primary transition duration-200 shadow-sm hover:shadow-md bg-white"
+              className="peer w-full border border-gray-300 px-3 py-2.5 rounded-md base focus:outline-none focus:ring-2 focus:ring-primary transition duration-200 shadow-sm hover:shadow-md bg-white"
               required
             />
           </div>
 
           <div className="relative">
-            <label className="block mb-1 text-gray-700 font-semibold">Email</label>
+            <label className="block mb-1 text-gray-700 font-semibold text-sm">Email</label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
               placeholder="Enter your email"
-              className="peer w-full border border-gray-300 px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-primary transition duration-200 shadow-sm hover:shadow-md bg-white"
+              className="peer w-full border border-gray-300 px-3 py-2.5 rounded-md base focus:outline-none focus:ring-2 focus:ring-primary transition duration-200 shadow-sm hover:shadow-md bg-white"
               required
             />
           </div>
 
           <div className="relative">
-            <label className="block mb-1 text-gray-700 font-semibold">Message</label>
+            <label className="block mb-1 text-gray-700 font-semibold base">Message</label>
             <textarea
               name="message"
               value={formData.message}
               onChange={handleChange}
-              rows="4"
+              rows="3"
               placeholder="Type your message here..."
-              className="peer w-full border border-gray-300 px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-primary transition duration-200 shadow-sm hover:shadow-md resize-none bg-white"
+              className="peer w-full border border-gray-300 px-3 py-2.5 rounded-md base focus:outline-none focus:ring-2 focus:ring-primary transition duration-200 shadow-sm hover:shadow-md resize-none bg-white"
               required
             ></textarea>
           </div>
@@ -126,7 +126,7 @@ const Contact = () => {
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             disabled={isSubmitting}
-            className="w-full bg-primary text-white px-6 py-3 rounded-md font-semibold hover:bg-primary/90 transition duration-200 shadow-md hover:shadow-lg disabled:opacity-60"
+            className="w-full bg-primary text-white px-4 py-2.5 rounded-md base font-semibold hover:bg-primary/90 transition duration-200 shadow-md hover:shadow-lg disabled:opacity-60"
           >
             {isSubmitting ? "Sending..." : "Send Message"}
           </motion.button>

@@ -9,6 +9,7 @@ const SellerLayout = () => {
   const { axios } = useAppContext();
   const navigate = useNavigate();
   const [authChecked, setAuthChecked] = useState(false);
+  const [sellerName, setSellerName] = useState(""); // 👈 Add seller name state
 
   const sidebarLinks = [
     { name: "Add Product", path: "/seller", icon: assets.add_icon },
@@ -39,6 +40,7 @@ const SellerLayout = () => {
         toast.error("Not Authorized");
         navigate("/seller-login");
       } else {
+        setSellerName(data.seller.name); // ✅ Store seller name
         setAuthChecked(true); // ✅ Only show layout after auth check
       }
     } catch (error) {
@@ -69,7 +71,9 @@ const SellerLayout = () => {
           />
         </Link>
         <div className="flex items-center gap-4 text-gray-700 font-medium text-sm">
-          <p className="hidden sm:block tracking-wide text-gray-800">Hi! Admin</p>
+          <p className="hidden sm:block tracking-wide text-gray-800">
+            Hi! {sellerName?.split(" ")[0] || "Seller"}
+          </p>
           <button
             onClick={logout}
             className="border border-gray-300 px-4 py-1.5 rounded-full bg-white hover:bg-primary/10 hover:text-primary hover:shadow-md transition duration-200"

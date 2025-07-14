@@ -1,13 +1,32 @@
-import express from 'express';
-import { upload } from '../configs/multer.js';
-import authSeller from '../middlewares/authSeller.js';
-import { addProduct, changeStock, productById, productList } from '../controllers/productController.js';
+import express from "express";
+import {
+  getSellerProducts,
+  addProduct,
+  productList,
+  productById,
+  changeStock,
+} from "../controllers/productController.js";
+import { verifySeller } from "../middlewares/verifySeller.js";
+import multer from "multer";
 
-const productRouter = express.Router();
+const storage = multer.diskStorage({});
+const upload = multer({ storage });
 
-productRouter.post('/add', upload.array(["images"]), authSeller, addProduct);
-productRouter.get('/list', productList)
-productRouter.get('/id', productById)
-productRouter.post('/stock', authSeller, changeStock)
+const router = express.Router();
 
-export default productRouter;
+// ✅ Add product by seller
+router.post("/add", verifySeller, upload.array("images"), addProduct);
+
+// ✅ Get all products (for public)
+router.get("/list", productList);
+
+// ✅ Get a product by ID
+router.post("/id", productById);
+
+// ✅ Update stock (seller only)
+router.post("/stock", verifySeller, changeStock);
+
+// ✅ Get only seller's own products
+router.get("/seller-products", verifySeller, getSellerProducts);
+
+export default router;

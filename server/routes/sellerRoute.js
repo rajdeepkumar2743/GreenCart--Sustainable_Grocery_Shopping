@@ -1,20 +1,22 @@
-import express from 'express';
+import express from "express";
 import {
-  isSellerAuth,
+  registerSeller,
   sellerLogin,
-  sellerLogout
-} from '../controllers/sellerController.js';
-import authSeller from '../middlewares/authSeller.js';
+  sellerLogout,
+  isSellerAuth,
+  verifySellerEmail,
+} from "../controllers/sellerController.js";
+import authSeller from "../middlewares/authSeller.js";
 
 const sellerRouter = express.Router();
 
-// ✅ Seller Login (sets cookie)
-sellerRouter.post('/login', sellerLogin);
+// ✅ Seller registration & verification
+sellerRouter.post("/register", registerSeller);
+sellerRouter.post("/verify", verifySellerEmail);
 
-// ✅ Check if seller is authenticated
-sellerRouter.get('/is-auth', authSeller, isSellerAuth);
-
-// ✅ Seller Logout (clears cookie)
-sellerRouter.get('/logout', sellerLogout);
+// ✅ Seller login/logout/auth check
+sellerRouter.post("/login", sellerLogin);
+sellerRouter.get("/logout", sellerLogout);
+sellerRouter.get("/is-auth", authSeller, isSellerAuth);
 
 export default sellerRouter;
