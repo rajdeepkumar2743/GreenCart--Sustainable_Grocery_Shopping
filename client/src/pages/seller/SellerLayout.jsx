@@ -76,7 +76,7 @@ const SellerLayout = () => {
           </p>
           <button
             onClick={logout}
-            className="border border-gray-300 px-4 py-1.5 rounded-full bg-white hover:bg-primary/10 hover:text-primary hover:shadow-md transition duration-200"
+            className="border border-green-300 px-4 py-1.5 rounded-full bg-white hover:bg-primary/10 hover:text-primary hover:shadow-md transition duration-200"
           >
             Logout
           </button>
